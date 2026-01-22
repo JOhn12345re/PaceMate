@@ -2,6 +2,72 @@
 
 Toutes les modifications notables de ce projet seront documentées dans ce fichier.
 
+## [3.1.0] - 2026-01-22
+
+### 🛤️ Parcours Sécurisés
+
+#### Nouvelle Fonctionnalité Majeure
+- ✨ **Base de données de parcours sécurisés et certifiés**
+- ✨ 8+ parcours pré-chargés (Paris, Lyon, Nice, Marseille)
+- ✨ 5 types de parcours :
+  - 🏟️ Pistes athlétiques officielles (homologuées FFA)
+  - 🌳 Parcs urbains avec chemins balisés
+  - 🏙️ Circuits urbains sécurisés (berges, promenades)
+  - 🌄 Sentiers nature certifiés
+  - 🏖️ Parcours côtiers
+
+#### Système de Certification
+- ⭐ 5 niveaux de certification (1-5 étoiles)
+- 🔒 3 niveaux de sécurité :
+  - Maximale (éclairage 100%, surveillance 24/7)
+  - Élevée (éclairage 70%+, patrouilles régulières)
+  - Standard (éclairage partiel, zone fréquentée)
+
+#### Critères d'Accessibilité
+- ♿ Accessibilité PMR détaillée (% accessible)
+- 🚼 Compatible poussette
+- 👨‍👩‍👧‍👦 Parcours familiaux
+- 🦮 Support personnes malvoyantes
+
+#### Informations Complètes
+- 📏 Distance et dénivelé précis
+- 🛤️ Type de surface (tartan, asphalte, gravier...)
+- 🟢🟡🔴 Niveau de difficulté
+- 🛠️ Équipements disponibles (eau, toilettes, parking, vestiaires...)
+- ⭐ Notes et avis communautaires
+- 🕐 Meilleurs horaires de course
+- 📸 Photos des parcours
+
+#### Filtres Avancés
+- Type de parcours
+- Distance (sprint, court, moyen, long)
+- Niveau de sécurité
+- Accessibilité PMR
+- Équipements spécifiques
+
+#### Interface
+- 🗺️ Affichage sur carte interactive avec marqueurs colorés
+- 📋 Liste détaillée avec cartes de parcours
+- 🔍 Recherche et filtrage avancé
+- 📱 Modal de détails complet
+- 🎯 Navigation vers le parcours
+- 📤 Partage de parcours
+- 💾 Favoris et historique
+
+#### Guide Complet
+- 📖 `GUIDE_PARCOURS_SECURISES.md` créé (60+ sections)
+- Documentation exhaustive de tous les types de parcours
+- Critères de sécurité détaillés
+- Guide d'utilisation dans l'app
+
+### 🎨 Améliorations Interface
+- 🛤️ Nouveau bouton "Parcours sécurisés" dans les contrôles carte
+- 🎨 Styles CSS complets pour les parcours
+- 📊 Cartes de parcours avec animations
+- 🔔 Notifications contextuelles
+
+---
+
 ## [3.0.0] - 2026-01-22
 
 ### 🚀 Nouveautés Majeures

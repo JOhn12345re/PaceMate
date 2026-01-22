@@ -40,6 +40,13 @@ PaceMate est une **application full-stack moderne** qui transforme la course à 
 - Heatmap d'activité
 - Filtres avancés (coureurs, zones, POI)
 - Mode plein écran
+- 🛤️ **Parcours sécurisés** : Pistes officielles certifiées et sécurisées
+  - Pistes athlétiques homologuées
+  - Parcs urbains avec chemins balisés
+  - Circuits urbains sécurisés
+  - Sentiers nature certifiés
+  - Parcours côtiers
+  - Critères de sécurité (éclairage, surveillance, accessibilité PMR)
 
 ### 🎮 Mini-Jeux Multijoueurs
 

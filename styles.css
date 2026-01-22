@@ -2524,3 +2524,422 @@ body {
     }
 }
 
+/* ========================================
+   PARCOURS SÉCURISÉS
+   ======================================== */
+
+/* Safe Path Icon on Map */
+.safe-path-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: var(--shadow-md);
+    border: 2px solid var(--white);
+    animation: pathPulse 2s infinite;
+}
+
+@keyframes pathPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+    }
+}
+
+/* Safe Path Popup */
+.safe-path-popup {
+    min-width: 280px;
+}
+
+.safe-path-popup h3 {
+    margin-bottom: 10px;
+    color: var(--dark);
+    font-size: 1.1rem;
+}
+
+.path-certification {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.path-info {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+}
+
+.path-info > div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.path-rating {
+    margin: 10px 0;
+    font-size: 0.9rem;
+}
+
+.path-accessibility {
+    margin: 8px 0;
+    font-size: 0.85rem;
+    display: flex;
+    gap: 10px;
+}
+
+.path-equipments {
+    margin: 8px 0;
+    font-size: 1.1rem;
+}
+
+/* Safe Paths Modal */
+.large-modal {
+    max-width: 1000px !important;
+    width: 95%;
+}
+
+.safe-paths-filters {
+    background: var(--gray-light);
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+.safe-paths-filters h3 {
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.filter-group {
+    margin-bottom: 1rem;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark);
+}
+
+.filter-group select,
+.filter-group input[type="checkbox"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid var(--gray-light);
+    border-radius: 10px;
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.filter-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
+
+/* Safe Paths List */
+.safe-paths-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.safe-path-card {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.safe-path-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.path-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.path-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.path-title h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+    color: var(--dark);
+}
+
+.path-location {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.path-certification {
+    font-size: 0.9rem;
+    margin-left: auto;
+}
+
+.path-card-body {
+    margin-bottom: 1rem;
+}
+
+.path-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.path-stats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.path-security-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+}
+
+.path-features {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.8rem;
+}
+
+.path-features span {
+    background: var(--gray-light);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+}
+
+.path-rating {
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+}
+
+.path-description {
+    font-size: 0.85rem;
+    color: var(--gray);
+    line-height: 1.5;
+}
+
+.path-card-footer {
+    display: flex;
+    gap: 0.8rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-light);
+}
+
+.path-card-footer button {
+    flex: 1;
+    padding: 0.6rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+/* Path Details Modal */
+.path-details {
+    padding: 1rem;
+}
+
+.path-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.path-rating-large {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.path-certification-large {
+    font-size: 1.2rem;
+}
+
+.path-main-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.info-card {
+    background: var(--gray-light);
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+}
+
+.info-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.path-section {
+    margin-bottom: 2rem;
+}
+
+.path-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.security-details {
+    background: var(--gray-light);
+    padding: 1.5rem;
+    border-radius: 15px;
+}
+
+.security-badge-large {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.security-badge-large.maximale {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: var(--white);
+}
+
+.security-badge-large.elevee {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: var(--white);
+}
+
+.security-badge-large.standard {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: var(--white);
+}
+
+.security-info {
+    display: flex;
+    gap: 2rem;
+    font-size: 0.9rem;
+}
+
+.accessibility-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.access-item {
+    background: var(--gray-light);
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    border: 2px solid transparent;
+    transition: var(--transition);
+}
+
+.access-item.available {
+    border-color: var(--success);
+    background: rgba(6, 214, 160, 0.1);
+}
+
+.access-item.unavailable {
+    opacity: 0.5;
+}
+
+.equipments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.8rem;
+}
+
+.equipment-item {
+    background: var(--gray-light);
+    padding: 0.8rem;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.best-times {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.time-badge {
+    background: var(--primary);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.photos-placeholder {
+    background: var(--gray-light);
+    padding: 3rem;
+    border-radius: 15px;
+}
+
+/* Responsive Safe Paths */
+@media (max-width: 768px) {
+    .safe-paths-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .path-main-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .path-card-footer {
+        flex-direction: column;
+    }
+    
+    .security-info {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+

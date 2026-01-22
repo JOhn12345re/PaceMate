@@ -42,7 +42,19 @@ const APP_STATE = {
         friends: []
     },
     map: null,
-    markers: []
+    markers: [],
+    safePaths: {
+        all: [],
+        filtered: [],
+        currentPath: null,
+        filters: {
+            type: 'all',
+            distance: 'all',
+            accessibility: false,
+            security: 'all',
+            equipments: []
+        }
+    }
 };
 
 // ========================================
@@ -2900,6 +2912,804 @@ window.loadRoute = loadRoute;
 window.deleteRoute = deleteRoute;
 window.shareRoute = shareRoute;
 window.nextInstruction = nextInstruction;
+
+// ========================================
+// PARCOURS SÉCURISÉS
+// ========================================
+
+// Base de données des parcours sécurisés
+const SAFE_PATHS_DB = [
+    {
+        id: 1,
+        name: 'Bois de Vincennes - Boucle 5km',
+        type: 'parc_urbain',
+        city: 'Paris',
+        location: [48.8275, 2.4322],
+        coordinates: [
+            [48.8275, 2.4322],
+            [48.8300, 2.4350],
+            [48.8320, 2.4380],
+            [48.8340, 2.4400],
+            [48.8350, 2.4380],
+            [48.8330, 2.4350],
+            [48.8300, 2.4330],
+            [48.8275, 2.4322]
+        ],
+        distance: 5.2,
+        surface: 'asphalte',
+        elevation: 8,
+        difficulty: 'facile',
+        certification: 4,
+        security: 'elevee',
+        lighting: 70,
+        accessibility: {
+            pmr: true,
+            pmrPercent: 80,
+            stroller: true,
+            familyFriendly: true
+        },
+        equipments: ['eau', 'toilettes', 'parking', 'eclairage'],
+        rating: 4.5,
+        reviews: 1234,
+        runsCount: 5678,
+        description: 'Magnifique boucle dans le Bois de Vincennes. Surface stable, bien entretenue.',
+        bestTimes: ['6h-9h', '18h-20h'],
+        photos: 12
+    },
+    {
+        id: 2,
+        name: 'Berges de Seine - Paris Centre',
+        type: 'circuit_urbain',
+        city: 'Paris',
+        location: [48.8566, 2.3522],
+        coordinates: [
+            [48.8566, 2.3522],
+            [48.8580, 2.3540],
+            [48.8595, 2.3560],
+            [48.8610, 2.3580],
+            [48.8625, 2.3600],
+            [48.8640, 2.3620],
+            [48.8655, 2.3640]
+        ],
+        distance: 7.0,
+        surface: 'beton',
+        elevation: 2,
+        difficulty: 'facile',
+        certification: 5,
+        security: 'maximale',
+        lighting: 100,
+        accessibility: {
+            pmr: true,
+            pmrPercent: 100,
+            stroller: true,
+            familyFriendly: true
+        },
+        equipments: ['eau', 'toilettes', 'parking', 'eclairage', 'vestiaires'],
+        rating: 4.6,
+        reviews: 2456,
+        runsCount: 9500,
+        description: 'Parcours iconique le long de la Seine. Parfait pour courir en sécurité 24/7.',
+        bestTimes: ['7h-10h', '19h-21h'],
+        photos: 25
+    },
+    {
+        id: 3,
+        name: 'Stade Charléty - Piste Olympique',
+        type: 'piste_athletique',
+        city: 'Paris',
+        location: [48.8187, 2.3464],
+        coordinates: [
+            [48.8187, 2.3464],
+            [48.8190, 2.3467],
+            [48.8187, 2.3470],
+            [48.8184, 2.3467],
+            [48.8187, 2.3464]
+        ],
+        distance: 0.4,
+        surface: 'tartan',
+        elevation: 0,
+        difficulty: 'facile',
+        certification: 5,
+        security: 'maximale',
+        lighting: 100,
+        accessibility: {
+            pmr: true,
+            pmrPercent: 100,
+            stroller: false,
+            familyFriendly: true
+        },
+        equipments: ['eau', 'toilettes', 'parking', 'eclairage', 'vestiaires', 'chronometrage'],
+        rating: 4.8,
+        reviews: 856,
+        runsCount: 15000,
+        description: 'Piste homologuée FFA. Surface tartan professionnelle. Mesure exacte.',
+        bestTimes: ['6h-22h'],
+        photos: 15
+    },
+    {
+        id: 4,
+        name: 'Parc de la Tête d\'Or - Lyon',
+        type: 'parc_urbain',
+        city: 'Lyon',
+        location: [45.7769, 4.8539],
+        coordinates: [
+            [45.7769, 4.8539],
+            [45.7785, 4.8555],
+            [45.7800, 4.8570],
+            [45.7815, 4.8555],
+            [45.7800, 4.8540],
+            [45.7785, 4.8530],
+            [45.7769, 4.8539]
+        ],
+        distance: 3.8,
+        surface: 'gravier',
+        elevation: 5,
+        difficulty: 'facile',
+        certification: 5,
+        security: 'elevee',
+        lighting: 80,
+        accessibility: {
+            pmr: true,
+            pmrPercent: 70,
+            stroller: true,
+            familyFriendly: true
+        },
+        equipments: ['eau', 'toilettes', 'parking', 'eclairage'],
+        rating: 4.7,
+        reviews: 1987,
+        runsCount: 12000,
+        description: 'Plus grand parc urbain de France. Paysages magnifiques, lac et zoo.',
+        bestTimes: ['6h-9h', '17h-19h'],
+        photos: 30
+    },
+    {
+        id: 5,
+        name: 'Promenade des Anglais - Nice',
+        type: 'parcours_cotier',
+        city: 'Nice',
+        location: [43.6947, 7.2663],
+        coordinates: [
+            [43.6947, 7.2663],
+            [43.6950, 7.2680],
+            [43.6955, 7.2700],
+            [43.6960, 7.2720],
+            [43.6965, 7.2740],
+            [43.6970, 7.2760],
+            [43.6975, 7.2780]
+        ],
+        distance: 7.0,
+        surface: 'asphalte',
+        elevation: 0,
+        difficulty: 'facile',
+        certification: 5,
+        security: 'maximale',
+        lighting: 100,
+        accessibility: {
+            pmr: true,
+            pmrPercent: 100,
+            stroller: true,
+            familyFriendly: true
+        },
+        equipments: ['eau', 'toilettes', 'parking', 'eclairage', 'plage'],
+        rating: 4.8,
+        reviews: 3421,
+        runsCount: 10000,
+        description: 'Mythique Promenade des Anglais. Vue mer exceptionnelle. Plat et sécurisé.',
+        bestTimes: ['6h-9h', '18h-20h'],
+        photos: 45
+    },
+    {
+        id: 6,
+        name: 'Sentier de la Coulée Verte - Paris',
+        type: 'sentier_nature',
+        city: 'Paris',
+        location: [48.8466, 2.3722],
+        coordinates: [
+            [48.8466, 2.3722],
+            [48.8475, 2.3730],
+            [48.8485, 2.3740],
+            [48.8495, 2.3750],
+            [48.8505, 2.3760]
+        ],
+        distance: 4.5,
+        surface: 'gravier',
+        elevation: 15,
+        difficulty: 'moyen',
+        certification: 4,
+        security: 'elevee',
+        lighting: 60,
+        accessibility: {
+            pmr: false,
+            pmrPercent: 50,
+            stroller: true,
+            familyFriendly: true
+        },
+        equipments: ['eau', 'bancs'],
+        rating: 4.4,
+        reviews: 892,
+        runsCount: 6500,
+        description: 'Ancien viaduc transformé en jardin suspendu. Unique et verdoyant.',
+        bestTimes: ['7h-10h', '16h-19h'],
+        photos: 18
+    },
+    {
+        id: 7,
+        name: 'Parc Borély - Marseille',
+        type: 'parc_urbain',
+        city: 'Marseille',
+        location: [43.2595, 5.3761],
+        coordinates: [
+            [43.2595, 5.3761],
+            [43.2605, 5.3770],
+            [43.2615, 5.3775],
+            [43.2615, 5.3765],
+            [43.2605, 5.3755],
+            [43.2595, 5.3761]
+        ],
+        distance: 2.5,
+        surface: 'asphalte',
+        elevation: 3,
+        difficulty: 'facile',
+        certification: 4,
+        security: 'elevee',
+        lighting: 75,
+        accessibility: {
+            pmr: true,
+            pmrPercent: 85,
+            stroller: true,
+            familyFriendly: true
+        },
+        equipments: ['eau', 'toilettes', 'parking', 'eclairage'],
+        rating: 4.4,
+        reviews: 1123,
+        runsCount: 8000,
+        description: 'Parc historique avec jardins à la française. Boucle courte et agréable.',
+        bestTimes: ['7h-9h', '18h-20h'],
+        photos: 22
+    },
+    {
+        id: 8,
+        name: 'Jardin des Tuileries - Paris',
+        type: 'parc_urbain',
+        city: 'Paris',
+        location: [48.8634, 2.3275],
+        coordinates: [
+            [48.8634, 2.3275],
+            [48.8640, 2.3285],
+            [48.8645, 2.3295],
+            [48.8640, 2.3305],
+            [48.8635, 2.3295],
+            [48.8634, 2.3275]
+        ],
+        distance: 2.0,
+        surface: 'gravier',
+        elevation: 2,
+        difficulty: 'facile',
+        certification: 4,
+        security: 'maximale',
+        lighting: 90,
+        accessibility: {
+            pmr: true,
+            pmrPercent: 80,
+            stroller: true,
+            familyFriendly: true
+        },
+        equipments: ['eau', 'toilettes', 'bancs'],
+        rating: 4.3,
+        reviews: 678,
+        runsCount: 5500,
+        description: 'Jardin historique au cœur de Paris. Court mais magnifique.',
+        bestTimes: ['6h-9h', '19h-21h'],
+        photos: 28
+    }
+];
+
+// Initialiser les parcours sécurisés
+function initSafePaths() {
+    APP_STATE.safePaths.all = [...SAFE_PATHS_DB];
+    APP_STATE.safePaths.filtered = [...SAFE_PATHS_DB];
+}
+
+// Afficher les parcours sur la carte
+function displaySafePathsOnMap() {
+    // Nettoyer les marqueurs existants de parcours
+    APP_STATE.markers = APP_STATE.markers.filter(marker => {
+        if (marker.options.className && marker.options.className.includes('safe-path-marker')) {
+            APP_STATE.map.removeLayer(marker);
+            return false;
+        }
+        return true;
+    });
+
+    // Ajouter les marqueurs de parcours filtrés
+    APP_STATE.safePaths.filtered.forEach(path => {
+        const securityIcon = path.security === 'maximale' ? '🟢' : path.security === 'elevee' ? '🟡' : '🟠';
+        const certificationStars = '⭐'.repeat(path.certification);
+
+        const marker = L.marker(path.location, {
+            icon: L.divIcon({
+                className: 'safe-path-marker',
+                html: `<div class="safe-path-icon">${securityIcon}</div>`,
+                iconSize: [30, 30]
+            })
+        }).addTo(APP_STATE.map);
+
+        marker.bindPopup(`
+            <div class="safe-path-popup">
+                <h3>${path.name}</h3>
+                <div class="path-certification">${certificationStars}</div>
+                <div class="path-info">
+                    <div>📏 ${path.distance}km</div>
+                    <div>🎯 ${path.difficulty === 'facile' ? '🟢 Facile' : path.difficulty === 'moyen' ? '🟡 Moyen' : '🔴 Difficile'}</div>
+                    <div>🔒 ${path.security === 'maximale' ? 'Max' : path.security === 'elevee' ? 'Élevée' : 'Standard'}</div>
+                </div>
+                <div class="path-rating">⭐ ${path.rating}/5 (${path.reviews} avis)</div>
+                <div class="path-accessibility">
+                    ${path.accessibility.pmr ? '♿ PMR ✅' : '♿ PMR ❌'}
+                    ${path.accessibility.stroller ? '🚼 Poussette ✅' : ''}
+                </div>
+                <div class="path-equipments">
+                    ${path.equipments.map(eq => {
+                        const icons = {
+                            'eau': '🚰',
+                            'toilettes': '🚻',
+                            'parking': '🅿️',
+                            'eclairage': '💡',
+                            'vestiaires': '🚿',
+                            'chronometrage': '⏱️',
+                            'plage': '🏖️',
+                            'bancs': '🪑'
+                        };
+                        return icons[eq] || '';
+                    }).join(' ')}
+                </div>
+                <button onclick="viewSafePathDetails(${path.id})" class="btn-primary" style="margin-top: 10px;">
+                    📋 Voir détails
+                </button>
+                <button onclick="startSafePath(${path.id})" class="btn-success" style="margin-top: 5px;">
+                    ▶️ Démarrer
+                </button>
+            </div>
+        `);
+
+        APP_STATE.markers.push(marker);
+    });
+}
+
+// Afficher le panneau des parcours sécurisés
+function openSafePathsPanel() {
+    const modal = document.createElement('div');
+    modal.id = 'safePathsModal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h2>🛤️ Parcours Sécurisés</h2>
+                <button class="close-btn" onclick="closeSafePathsPanel()">✕</button>
+            </div>
+            <div class="modal-body">
+                <!-- Filtres -->
+                <div class="safe-paths-filters">
+                    <h3>🔍 Filtres</h3>
+                    <div class="filter-group">
+                        <label>Type de parcours</label>
+                        <select id="pathTypeFilter" onchange="filterSafePaths()">
+                            <option value="all">Tous</option>
+                            <option value="piste_athletique">🏟️ Piste athlétique</option>
+                            <option value="parc_urbain">🌳 Parc urbain</option>
+                            <option value="circuit_urbain">🏙️ Circuit urbain</option>
+                            <option value="sentier_nature">🌄 Sentier nature</option>
+                            <option value="parcours_cotier">🏖️ Parcours côtier</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Distance</label>
+                        <select id="pathDistanceFilter" onchange="filterSafePaths()">
+                            <option value="all">Toutes</option>
+                            <option value="0-2">Sprint (< 2km)</option>
+                            <option value="2-5">Court (2-5km)</option>
+                            <option value="5-10">Moyen (5-10km)</option>
+                            <option value="10+">Long (> 10km)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sécurité</label>
+                        <select id="pathSecurityFilter" onchange="filterSafePaths()">
+                            <option value="all">Toutes</option>
+                            <option value="maximale">🔒 Maximale</option>
+                            <option value="elevee">🔓 Élevée</option>
+                            <option value="standard">⚠️ Standard</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>
+                            <input type="checkbox" id="pathAccessibilityFilter" onchange="filterSafePaths()">
+                            ♿ Accessibilité PMR
+                        </label>
+                    </div>
+                    <div class="filter-group">
+                        <button onclick="resetSafePathFilters()" class="btn-secondary">🔄 Réinitialiser</button>
+                    </div>
+                </div>
+
+                <!-- Liste des parcours -->
+                <div class="safe-paths-list" id="safePathsList">
+                    <!-- Rempli dynamiquement -->
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    modal.style.display = 'flex';
+
+    // Initialiser et afficher
+    initSafePaths();
+    displaySafePathsList();
+    displaySafePathsOnMap();
+}
+
+function closeSafePathsPanel() {
+    const modal = document.getElementById('safePathsModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Afficher la liste des parcours
+function displaySafePathsList() {
+    const listEl = document.getElementById('safePathsList');
+    if (!listEl) {
+        return;
+    }
+
+    if (APP_STATE.safePaths.filtered.length === 0) {
+        listEl.innerHTML = '<p style="text-align: center; padding: 20px;">Aucun parcours trouvé avec ces filtres</p>';
+        return;
+    }
+
+    listEl.innerHTML = APP_STATE.safePaths.filtered.map(path => {
+        const typeIcons = {
+            'piste_athletique': '🏟️',
+            'parc_urbain': '🌳',
+            'circuit_urbain': '🏙️',
+            'sentier_nature': '🌄',
+            'parcours_cotier': '🏖️'
+        };
+        const securityBadge = path.security === 'maximale' ? '🔒 Max' : path.security === 'elevee' ? '🔓 Élevée' : '⚠️ Standard';
+        const difficultyBadge = path.difficulty === 'facile' ? '🟢 Facile' : path.difficulty === 'moyen' ? '🟡 Moyen' : '🔴 Difficile';
+
+        return `
+            <div class="safe-path-card" onclick="viewSafePathDetails(${path.id})">
+                <div class="path-card-header">
+                    <div class="path-icon">${typeIcons[path.type] || '🏃'}</div>
+                    <div class="path-title">
+                        <h3>${path.name}</h3>
+                        <div class="path-location">📍 ${path.city}</div>
+                    </div>
+                    <div class="path-certification">${'⭐'.repeat(path.certification)}</div>
+                </div>
+                <div class="path-card-body">
+                    <div class="path-stats">
+                        <span>📏 ${path.distance}km</span>
+                        <span>📈 ${path.elevation}m</span>
+                        <span>${difficultyBadge}</span>
+                    </div>
+                    <div class="path-security-badge">${securityBadge}</div>
+                    <div class="path-features">
+                        <span>💡 ${path.lighting}% éclairé</span>
+                        ${path.accessibility.pmr ? '<span>♿ PMR</span>' : ''}
+                        ${path.accessibility.stroller ? '<span>🚼 Poussette</span>' : ''}
+                    </div>
+                    <div class="path-rating">
+                        ⭐ ${path.rating}/5 <span style="opacity: 0.7;">(${path.reviews} avis)</span>
+                    </div>
+                    <p class="path-description">${path.description}</p>
+                </div>
+                <div class="path-card-footer">
+                    <button onclick="event.stopPropagation(); viewPathOnMap(${path.id})" class="btn-secondary">
+                        🗺️ Sur la carte
+                    </button>
+                    <button onclick="event.stopPropagation(); startSafePath(${path.id})" class="btn-primary">
+                        ▶️ Démarrer
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Filtrer les parcours
+function filterSafePaths() {
+    const typeFilter = document.getElementById('pathTypeFilter')?.value || 'all';
+    const distanceFilter = document.getElementById('pathDistanceFilter')?.value || 'all';
+    const securityFilter = document.getElementById('pathSecurityFilter')?.value || 'all';
+    const accessibilityFilter = document.getElementById('pathAccessibilityFilter')?.checked || false;
+
+    APP_STATE.safePaths.filtered = APP_STATE.safePaths.all.filter(path => {
+        // Type
+        if (typeFilter !== 'all' && path.type !== typeFilter) {
+            return false;
+        }
+
+        // Distance
+        if (distanceFilter !== 'all') {
+            const distance = path.distance;
+            if (distanceFilter === '0-2' && distance >= 2) {
+                return false;
+            }
+            if (distanceFilter === '2-5' && (distance < 2 || distance >= 5)) {
+                return false;
+            }
+            if (distanceFilter === '5-10' && (distance < 5 || distance >= 10)) {
+                return false;
+            }
+            if (distanceFilter === '10+' && distance < 10) {
+                return false;
+            }
+        }
+
+        // Sécurité
+        if (securityFilter !== 'all' && path.security !== securityFilter) {
+            return false;
+        }
+
+        // Accessibilité
+        if (accessibilityFilter && !path.accessibility.pmr) {
+            return false;
+        }
+
+        return true;
+    });
+
+    displaySafePathsList();
+    displaySafePathsOnMap();
+}
+
+// Réinitialiser les filtres
+function resetSafePathFilters() {
+    if (document.getElementById('pathTypeFilter')) {
+        document.getElementById('pathTypeFilter').value = 'all';
+    }
+    if (document.getElementById('pathDistanceFilter')) {
+        document.getElementById('pathDistanceFilter').value = 'all';
+    }
+    if (document.getElementById('pathSecurityFilter')) {
+        document.getElementById('pathSecurityFilter').value = 'all';
+    }
+    if (document.getElementById('pathAccessibilityFilter')) {
+        document.getElementById('pathAccessibilityFilter').checked = false;
+    }
+    filterSafePaths();
+}
+
+// Voir les détails d'un parcours
+function viewSafePathDetails(pathId) {
+    const path = APP_STATE.safePaths.all.find(p => p.id === pathId);
+    if (!path) {
+        return;
+    }
+
+    const modal = document.createElement('div');
+    modal.id = 'pathDetailsModal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h2>${path.name}</h2>
+                <button class="close-btn" onclick="closePathDetails()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="path-details">
+                    <!-- En-tête -->
+                    <div class="path-details-header">
+                        <div class="path-rating-large">
+                            ⭐ ${path.rating}/5
+                            <span style="opacity: 0.7;">(${path.reviews} avis)</span>
+                        </div>
+                        <div class="path-certification-large">${'⭐'.repeat(path.certification)}</div>
+                    </div>
+
+                    <!-- Infos principales -->
+                    <div class="path-main-info">
+                        <div class="info-card">
+                            <div class="info-label">Distance</div>
+                            <div class="info-value">📏 ${path.distance}km</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Dénivelé</div>
+                            <div class="info-value">📈 ${path.elevation}m</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Difficulté</div>
+                            <div class="info-value">${path.difficulty === 'facile' ? '🟢 Facile' : path.difficulty === 'moyen' ? '🟡 Moyen' : '🔴 Difficile'}</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Surface</div>
+                            <div class="info-value">${path.surface}</div>
+                        </div>
+                    </div>
+
+                    <!-- Sécurité -->
+                    <div class="path-section">
+                        <h3>🔒 Sécurité</h3>
+                        <div class="security-details">
+                            <div class="security-badge-large ${path.security}">${path.security === 'maximale' ? '🔒 Sécurité Maximale' : path.security === 'elevee' ? '🔓 Sécurité Élevée' : '⚠️ Sécurité Standard'}</div>
+                            <div class="security-info">
+                                <div>💡 Éclairage : ${path.lighting}%</div>
+                                <div>👥 ${path.runsCount} courses enregistrées</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accessibilité -->
+                    <div class="path-section">
+                        <h3>♿ Accessibilité</h3>
+                        <div class="accessibility-grid">
+                            <div class="access-item ${path.accessibility.pmr ? 'available' : 'unavailable'}">
+                                ♿ PMR ${path.accessibility.pmr ? `✅ (${path.accessibility.pmrPercent}%)` : '❌'}
+                            </div>
+                            <div class="access-item ${path.accessibility.stroller ? 'available' : 'unavailable'}">
+                                🚼 Poussette ${path.accessibility.stroller ? '✅' : '❌'}
+                            </div>
+                            <div class="access-item ${path.accessibility.familyFriendly ? 'available' : 'unavailable'}">
+                                👨‍👩‍👧‍👦 Familial ${path.accessibility.familyFriendly ? '✅' : '❌'}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Équipements -->
+                    <div class="path-section">
+                        <h3>🛠️ Équipements</h3>
+                        <div class="equipments-grid">
+                            ${path.equipments.map(eq => {
+                                const labels = {
+                                    'eau': '🚰 Points d\'eau',
+                                    'toilettes': '🚻 Toilettes',
+                                    'parking': '🅿️ Parking',
+                                    'eclairage': '💡 Éclairage',
+                                    'vestiaires': '🚿 Vestiaires',
+                                    'chronometrage': '⏱️ Chrono',
+                                    'plage': '🏖️ Plage',
+                                    'bancs': '🪑 Bancs'
+                                };
+                                return `<div class="equipment-item">${labels[eq] || eq}</div>`;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="path-section">
+                        <h3>📝 Description</h3>
+                        <p>${path.description}</p>
+                    </div>
+
+                    <!-- Meilleurs horaires -->
+                    <div class="path-section">
+                        <h3>🕐 Meilleurs horaires</h3>
+                        <div class="best-times">
+                            ${path.bestTimes.map(time => `<span class="time-badge">${time}</span>`).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Photos -->
+                    <div class="path-section">
+                        <h3>📸 Photos (${path.photos})</h3>
+                        <div class="photos-placeholder">
+                            <p style="text-align: center; opacity: 0.7;">Photos disponibles dans la version complète</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="viewPathOnMap(${path.id})" class="btn-secondary">🗺️ Voir sur la carte</button>
+                <button onclick="sharePathLink(${path.id})" class="btn-secondary">📤 Partager</button>
+                <button onclick="startSafePath(${path.id})" class="btn-primary">▶️ Démarrer ce parcours</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    modal.style.display = 'flex';
+}
+
+function closePathDetails() {
+    const modal = document.getElementById('pathDetailsModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Voir le parcours sur la carte
+function viewPathOnMap(pathId) {
+    const path = APP_STATE.safePaths.all.find(p => p.id === pathId);
+    if (!path) {
+        return;
+    }
+
+    // Fermer les modals
+    closeSafePathsPanel();
+    closePathDetails();
+
+    // Centrer sur le parcours
+    APP_STATE.map.setView(path.location, 15);
+
+    // Dessiner le parcours
+    const polyline = L.polyline(path.coordinates, {
+        color: path.security === 'maximale' ? '#10b981' : path.security === 'elevee' ? '#f59e0b' : '#ef4444',
+        weight: 4,
+        opacity: 0.8
+    }).addTo(APP_STATE.map);
+
+    APP_STATE.markers.push(polyline);
+
+    // Ajouter un marqueur de départ
+    const startMarker = L.marker(path.coordinates[0], {
+        icon: L.divIcon({
+            className: 'route-marker start-marker',
+            html: '<div>🏁</div>',
+            iconSize: [30, 30]
+        })
+    }).addTo(APP_STATE.map);
+
+    startMarker.bindPopup(`
+        <div class="marker-popup">
+            <h3>Départ - ${path.name}</h3>
+            <button onclick="startSafePath(${path.id})" class="btn-primary">▶️ Démarrer</button>
+        </div>
+    `);
+
+    APP_STATE.markers.push(startMarker);
+
+    showNotification(`📍 Parcours "${path.name}" affiché sur la carte`);
+}
+
+// Démarrer un parcours sécurisé
+function startSafePath(pathId) {
+    const path = APP_STATE.safePaths.all.find(p => p.id === pathId);
+    if (!path) {
+        return;
+    }
+
+    APP_STATE.safePaths.currentPath = path;
+
+    // Fermer les modals
+    closeSafePathsPanel();
+    closePathDetails();
+
+    // Afficher sur la carte
+    viewPathOnMap(pathId);
+
+    // Notification
+    showNotification(`🏃 Parcours "${path.name}" démarré ! Bonne course !`);
+
+    // TODO: Démarrer le tracking de la course
+    // Ajouter XP/coins à la fin
+}
+
+// Partager un lien de parcours
+function sharePathLink(pathId) {
+    const path = APP_STATE.safePaths.all.find(p => p.id === pathId);
+    if (!path) {
+        return;
+    }
+
+    const link = `https://pacemate.app/path/${path.id}`;
+    navigator.clipboard.writeText(link).then(() => {
+        showNotification(`📤 Lien du parcours "${path.name}" copié !`);
+    }).catch(() => {
+        showNotification(`📤 Lien: ${link}`);
+    });
+}
+
+// Rendre les fonctions accessibles globalement
+window.openSafePathsPanel = openSafePathsPanel;
+window.closeSafePathsPanel = closeSafePathsPanel;
+window.filterSafePaths = filterSafePaths;
+window.resetSafePathFilters = resetSafePathFilters;
+window.viewSafePathDetails = viewSafePathDetails;
+window.closePathDetails = closePathDetails;
+window.viewPathOnMap = viewPathOnMap;
+window.startSafePath = startSafePath;
+window.sharePathLink = sharePathLink;
 
 console.log('✅ PaceMate initialisé !');
 
