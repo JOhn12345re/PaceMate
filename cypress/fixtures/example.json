@@ -1,0 +1,82 @@
+{
+  "user": {
+    "name": "Test Runner",
+    "level": 5,
+    "xp": 450,
+    "coins": 1200,
+    "badges": ["🏃‍♂️", "🏆", "⭐"]
+  },
+  "routes": [
+    {
+      "id": 1,
+      "name": "Morning Run",
+      "start": [48.8566, 2.3522],
+      "end": [48.8606, 2.3376],
+      "waypoints": [],
+      "distance": "1.5 km",
+      "time": "9 min"
+    },
+    {
+      "id": 2,
+      "name": "Park Loop",
+      "start": [48.8566, 2.3522],
+      "end": [48.8566, 2.3522],
+      "waypoints": [[48.8590, 2.3450]],
+      "distance": "5.0 km",
+      "time": "30 min"
+    }
+  ],
+  "runners": [
+    {
+      "id": 1,
+      "name": "Alex",
+      "level": 10,
+      "pace": "5:30",
+      "distance": 0.5,
+      "position": [48.8570, 2.3525]
+    },
+    {
+      "id": 2,
+      "name": "Maria",
+      "level": 8,
+      "pace": "6:00",
+      "distance": 1.2,
+      "position": [48.8580, 2.3540]
+    }
+  ],
+  "challenges": [
+    {
+      "id": "daily1",
+      "title": "Course de 5km",
+      "description": "Courir 5 kilomètres",
+      "progress": 60,
+      "reward": "+100 XP",
+      "type": "daily"
+    },
+    {
+      "id": "daily2",
+      "title": "Rencontrer 3 coureurs",
+      "description": "Croiser 3 coureurs différents",
+      "progress": 33,
+      "reward": "+75 XP",
+      "type": "daily"
+    }
+  ],
+  "shopItems": [
+    {
+      "id": 1,
+      "name": "Chaussures Premium",
+      "description": "Des chaussures de course professionnelles",
+      "price": 500,
+      "icon": "👟"
+    },
+    {
+      "id": 2,
+      "name": "Boost XP x2",
+      "description": "Double ton XP pendant 1 heure",
+      "price": 300,
+      "icon": "⚡"
+    }
+  ]
+}
+

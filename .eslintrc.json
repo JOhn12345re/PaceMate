@@ -1,0 +1,67 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true,
+    "cypress/globals": true
+  },
+  "globals": {
+    "L": "readonly"
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "cypress"
+  ],
+  "rules": {
+    "indent": ["error", 4],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "semi": ["error", "always"],
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-debugger": "warn",
+    "eqeqeq": ["error", "always"],
+    "curly": ["error", "all"],
+    "brace-style": ["error", "1tbs"],
+    "comma-dangle": ["error", "never"],
+    "arrow-spacing": "error",
+    "space-before-blocks": "error",
+    "keyword-spacing": "error",
+    "object-curly-spacing": ["error", "always"],
+    "array-bracket-spacing": ["error", "never"],
+    "no-multiple-empty-lines": ["error", { "max": 2 }],
+    "no-trailing-spaces": "error",
+    "prefer-const": "error",
+    "no-var": "error",
+    "prefer-arrow-callback": "warn",
+    "prefer-template": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["cypress/**/*.js"],
+      "rules": {
+        "no-unused-expressions": "off"
+      }
+    },
+    {
+      "files": ["server.js", "api/**/*.js"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "node_modules/",
+    "public/**/*.min.js",
+    "dist/",
+    "build/",
+    "coverage/"
+  ]
+}
+

@@ -1,0 +1,2526 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Color Palette - Énergique et Motivant */
+    --primary: #FF6B35;
+    --primary-dark: #E65525;
+    --secondary: #4ECDC4;
+    --accent: #FFE66D;
+    --success: #06D6A0;
+    --danger: #EF476F;
+    --dark: #1A1A2E;
+    --dark-light: #16213E;
+    --gray: #94A3B8;
+    --gray-light: #E2E8F0;
+    --white: #FFFFFF;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.2);
+    
+    /* Transitions */
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--dark);
+    overflow-x: hidden;
+}
+
+/* Navigation Bar */
+.navbar {
+    background: var(--white);
+    box-shadow: var(--shadow-md);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.logo-icon {
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-coins, .user-level {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    background: var(--gray-light);
+    border-radius: 20px;
+}
+
+.coin-icon {
+    font-size: 1.2rem;
+}
+
+.user-xp {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.xp-bar {
+    width: 150px;
+    height: 8px;
+    background: var(--gray-light);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.xp-progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.xp-text {
+    font-size: 0.85rem;
+    color: var(--gray);
+    white-space: nowrap;
+}
+
+/* Main Container */
+.main-container {
+    display: grid;
+    grid-template-columns: 280px 1fr 320px;
+    max-width: 1400px;
+    margin: 2rem auto;
+    gap: 1.5rem;
+    padding: 0 2rem;
+    min-height: calc(100vh - 120px);
+}
+
+/* Sidebar */
+.sidebar {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-lg);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.sidebar-section {
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.sidebar-btn:hover {
+    background: var(--gray-light);
+    transform: translateX(5px);
+}
+
+.sidebar-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+}
+
+.notification-badge {
+    margin-left: auto;
+    background: var(--danger);
+    color: var(--white);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+/* Daily Challenges Sidebar */
+.daily-challenges {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.challenge-mini {
+    padding: 0.75rem;
+    background: linear-gradient(135deg, var(--accent), var(--secondary));
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--dark);
+    font-weight: 500;
+}
+
+/* User Badges Sidebar */
+.user-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.badge-mini {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    background: var(--gray-light);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.badge-mini:hover {
+    transform: scale(1.2);
+}
+
+/* Content Area */
+.content-area {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.view {
+    display: none;
+}
+
+.view.active {
+    display: block;
+}
+
+.view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.view-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+    background: var(--gray-light);
+    color: var(--dark);
+}
+
+.btn-secondary:hover {
+    background: var(--gray);
+    color: var(--white);
+}
+
+.map-controls {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Filters Panel */
+.filters-panel {
+    display: none;
+    background: var(--gray-light);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    gap: 1.5rem;
+}
+
+.filters-panel.active {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.filter-group input[type="range"] {
+    width: 100%;
+}
+
+.filter-group select {
+    padding: 0.5rem;
+    border: 2px solid var(--gray);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+/* Map Stats Bar */
+.map-stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(78, 205, 196, 0.1));
+    border-radius: 12px;
+    border: 2px solid var(--gray-light);
+}
+
+.map-stat {
+    text-align: center;
+    padding: 0.75rem;
+    background: var(--white);
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.map-stat:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.map-stat .stat-label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+}
+
+.map-stat .stat-value {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Map Style Selector */
+.map-style-selector {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-md);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.map-style-selector h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.style-options {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+}
+
+.style-option {
+    text-align: center;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 12px;
+    background: var(--gray-light);
+    transition: var(--transition);
+    border: 3px solid transparent;
+}
+
+.style-option:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.style-option.active {
+    border-color: var(--primary);
+    background: rgba(255, 107, 53, 0.1);
+}
+
+.style-preview {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 0.5rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.style-option span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+/* Map Container */
+.map-container {
+    width: 100%;
+    height: 600px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    transition: height 0.3s ease, width 0.3s ease;
+}
+
+.map-container.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999;
+    border-radius: 0;
+    margin: 0;
+}
+
+/* Map Legend */
+.map-legend {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    min-width: 150px;
+    transition: var(--transition);
+}
+
+.map-legend:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: var(--shadow-xl);
+}
+
+.map-legend h4 {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    color: var(--dark);
+    font-weight: 700;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.legend-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.legend-item:last-child {
+    margin-bottom: 0;
+}
+
+.legend-icon {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+/* Map Stats Overlay */
+.map-stats-overlay {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 1000;
+}
+
+.stat-mini {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    animation: slideInUp 0.5s ease;
+}
+
+.stat-mini .stat-icon {
+    font-size: 1.2rem;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Nearby Runners */
+.nearby-runners h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.runners-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.runner-card {
+    background: linear-gradient(135deg, var(--white), var(--gray-light));
+    border-radius: 12px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.runner-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.runner-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.runner-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.runner-info h4 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.runner-level {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.runner-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.runner-stat {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.runner-stat strong {
+    color: var(--dark);
+}
+
+.runner-distance {
+    text-align: center;
+    padding: 0.5rem;
+    background: var(--accent);
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-top: 0.5rem;
+}
+
+/* Challenges View */
+.challenges-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.challenges-section h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.challenges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.challenge-card {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 12px;
+    padding: 1.5rem;
+    color: var(--white);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.challenge-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.challenge-icon {
+    font-size: 2rem;
+}
+
+.challenge-reward {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.challenge-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.challenge-description {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+}
+
+.challenge-progress {
+    background: rgba(255, 255, 255, 0.2);
+    height: 8px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.challenge-progress-bar {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.5s ease;
+}
+
+.challenge-progress-text {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.challenge-card.completed {
+    background: linear-gradient(135deg, var(--success), #05b08a);
+}
+
+.challenge-completed-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--accent);
+    color: var(--dark);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Leaderboard */
+.leaderboard-tabs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: var(--gray-light);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+}
+
+.leaderboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--gray-light);
+    border-radius: 12px;
+    transition: var(--transition);
+}
+
+.leaderboard-item:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-md);
+}
+
+.leaderboard-rank {
+    font-size: 1.5rem;
+    font-weight: 800;
+    min-width: 50px;
+    text-align: center;
+}
+
+.leaderboard-rank.gold { color: #FFD700; }
+.leaderboard-rank.silver { color: #C0C0C0; }
+.leaderboard-rank.bronze { color: #CD7F32; }
+
+.leaderboard-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.leaderboard-info {
+    flex: 1;
+}
+
+.leaderboard-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.leaderboard-stats {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.leaderboard-score {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Friends View */
+.friends-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.friend-card {
+    background: var(--gray-light);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: var(--transition);
+}
+
+.friend-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.friend-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.friend-info {
+    flex: 1;
+}
+
+.friend-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.friend-status {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.friend-status.online {
+    color: var(--success);
+}
+
+.friend-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.icon-btn {
+    width: 35px;
+    height: 35px;
+    border: none;
+    background: var(--white);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+.icon-btn:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Shop View */
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.shop-item {
+    background: var(--gray-light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.shop-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.shop-item-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.shop-item-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.shop-item-description {
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin-bottom: 1rem;
+}
+
+.shop-item-price {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--primary);
+    color: var(--white);
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.shop-item.purchased {
+    background: var(--success);
+    color: var(--white);
+}
+
+.shop-item.purchased .shop-item-description {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Profile View */
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 12px;
+    color: var(--white);
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
+
+.profile-info h3 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-level {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.profile-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--gray-light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.profile-section {
+    margin-bottom: 2rem;
+}
+
+.profile-section h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1rem;
+}
+
+.badge-item {
+    background: var(--gray-light);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.badge-item:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+.badge-item.unlocked {
+    background: linear-gradient(135deg, var(--accent), var(--secondary));
+}
+
+.badge-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.badge-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-item.locked {
+    opacity: 0.4;
+    filter: grayscale(100%);
+}
+
+/* Chat Panel */
+.chat-panel {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--gray-light);
+}
+
+.chat-header h3 {
+    font-size: 1.1rem;
+}
+
+.chat-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: var(--transition);
+}
+
+.chat-close:hover {
+    opacity: 1;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 500px;
+}
+
+.chat-message {
+    padding: 0.75rem;
+    border-radius: 12px;
+    max-width: 80%;
+}
+
+.chat-message.sent {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+    align-self: flex-end;
+}
+
+.chat-message.received {
+    background: var(--gray-light);
+    color: var(--dark);
+    align-self: flex-start;
+}
+
+.chat-message-author {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.chat-message-text {
+    font-size: 0.9rem;
+}
+
+.chat-message-time {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    margin-top: 0.25rem;
+}
+
+.chat-input {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 2px solid var(--gray-light);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.chat-input button {
+    padding: 0.75rem 1rem;
+    border: none;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.chat-input button:hover {
+    transform: scale(1.05);
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: var(--shadow-xl);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.modal-header h3 {
+    font-size: 1.5rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    opacity: 1;
+}
+
+.modal-body {
+    margin-bottom: 1.5rem;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+/* Notification Toast */
+.notification-toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--dark);
+    color: var(--white);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-xl);
+    transform: translateY(200px);
+    opacity: 0;
+    transition: var(--transition);
+    z-index: 3000;
+    max-width: 300px;
+}
+
+.notification-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Distance Circles and Routes */
+.distance-circle {
+    fill: rgba(255, 107, 53, 0.1);
+    stroke: var(--primary);
+    stroke-width: 2;
+    stroke-dasharray: 5, 5;
+    animation: dashAnimation 20s linear infinite;
+}
+
+@keyframes dashAnimation {
+    to {
+        stroke-dashoffset: -1000;
+    }
+}
+
+.route-line {
+    stroke: var(--primary);
+    stroke-width: 4;
+    stroke-linecap: round;
+    fill: none;
+    opacity: 0.8;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* Heatmap Layer */
+.heatmap-active .map-container {
+    filter: saturate(1.2) contrast(1.1);
+}
+
+/* Enhanced Filter Panel */
+.filter-value {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.filters-panel label {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+/* Map Controls Enhancements */
+.map-controls .btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+/* Animated Runner Markers */
+.leaflet-marker-icon.runner-active {
+    animation: markerPulse 2s infinite;
+}
+
+/* Cluster Marker Styles */
+.marker-cluster-small {
+    background-color: rgba(255, 107, 53, 0.6);
+}
+
+.marker-cluster-medium {
+    background-color: rgba(255, 107, 53, 0.7);
+}
+
+.marker-cluster-large {
+    background-color: rgba(255, 107, 53, 0.9);
+}
+
+.marker-cluster div {
+    background-color: rgba(255, 107, 53, 0.8);
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+/* Popup Enhancements */
+.leaflet-popup-content {
+    margin: 1rem;
+    font-family: 'Poppins', sans-serif;
+    min-width: 250px;
+}
+
+.runner-popup-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--gray-light);
+}
+
+.runner-popup-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.runner-popup-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    color: var(--dark);
+}
+
+.runner-popup-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.runner-popup-stat {
+    padding: 0.75rem;
+    background: var(--gray-light);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.runner-popup-stat strong {
+    display: block;
+    font-size: 1.25rem;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+}
+
+.runner-popup-stat span {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.runner-popup-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.runner-popup-actions button {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.runner-popup-actions .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+}
+
+.runner-popup-actions .btn-secondary {
+    background: var(--gray-light);
+    color: var(--dark);
+}
+
+.runner-popup-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Route Planning Panel */
+.route-planning-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-xl);
+    z-index: 2000;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.route-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--gray-light);
+}
+
+.route-panel-header h3 {
+    font-size: 1.5rem;
+    color: var(--dark);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: var(--transition);
+    padding: 0.5rem;
+}
+
+.close-btn:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+/* Route Steps */
+.route-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.route-step {
+    display: flex;
+    gap: 1rem;
+    align-items: start;
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--white);
+    flex-shrink: 0;
+    box-shadow: var(--shadow-md);
+}
+
+.step-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.step-content label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray);
+}
+
+.step-content input {
+    padding: 0.75rem;
+    border: 2px solid var(--gray-light);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    background: var(--gray-light);
+    cursor: not-allowed;
+}
+
+.step-content input.selected {
+    border-color: var(--primary);
+    background: var(--white);
+}
+
+.step-btn {
+    padding: 0.6rem 1rem;
+    border: 2px solid var(--primary);
+    background: var(--white);
+    color: var(--primary);
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.85rem;
+}
+
+.step-btn:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.step-btn.active {
+    background: var(--primary);
+    color: var(--white);
+    animation: pulse 1.5s infinite;
+}
+
+/* Waypoints */
+.waypoints-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.waypoint-step {
+    display: flex;
+    gap: 1rem;
+    align-items: start;
+    padding: 1rem;
+    background: var(--gray-light);
+    border-radius: 12px;
+}
+
+.waypoint-step .step-icon {
+    background: linear-gradient(135deg, var(--accent), var(--secondary));
+}
+
+.remove-waypoint-btn {
+    padding: 0.5rem;
+    background: var(--danger);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.85rem;
+}
+
+.remove-waypoint-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Route Options */
+.route-options {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.route-options .btn {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+}
+
+/* Route Info */
+.route-info {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(78, 205, 196, 0.1));
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.route-info h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.route-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.route-stat {
+    background: var(--white);
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.route-stat .stat-icon {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.route-stat .stat-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-bottom: 0.25rem;
+}
+
+.route-stat .stat-value {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.route-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.route-actions .btn {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: var(--white);
+}
+
+.btn-danger:hover {
+    background: #d63d5e;
+}
+
+/* Saved Routes */
+.saved-routes {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--gray-light);
+}
+
+.saved-routes h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.saved-route-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--gray-light);
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.saved-route-item:hover {
+    background: var(--primary);
+    color: var(--white);
+    transform: translateX(5px);
+}
+
+.saved-route-info {
+    flex: 1;
+}
+
+.saved-route-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.saved-route-details {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.saved-route-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.saved-route-actions button {
+    padding: 0.5rem;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--dark);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.saved-route-actions button:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Route Markers on Map */
+.route-marker-start,
+.route-marker-end,
+.route-marker-waypoint {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--white);
+    box-shadow: var(--shadow-lg);
+    border: 3px solid var(--white);
+    animation: markerAppear 0.5s ease;
+}
+
+@keyframes markerAppear {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.route-marker-start {
+    background: linear-gradient(135deg, #06D6A0, #05b08a);
+}
+
+.route-marker-end {
+    background: linear-gradient(135deg, #EF476F, #d63d5e);
+}
+
+.route-marker-waypoint {
+    background: linear-gradient(135deg, #FFE66D, #ffd93d);
+    color: var(--dark);
+}
+
+/* Route Line Styles */
+.planned-route-line {
+    stroke: var(--primary);
+    stroke-width: 5;
+    stroke-linecap: round;
+    fill: none;
+    opacity: 0.9;
+    filter: drop-shadow(0 2px 8px rgba(255, 107, 53, 0.4));
+    animation: routeDraw 1s ease;
+}
+
+@keyframes routeDraw {
+    from {
+        stroke-dashoffset: 1000;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Navigation Mode */
+.navigation-active {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dark);
+    color: var(--white);
+    padding: 1.5rem 2rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-xl);
+    z-index: 2000;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-instruction {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.nav-distance {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.nav-stop-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--danger);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.nav-stop-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Route Instructions */
+.route-instructions {
+    background: var(--white);
+    padding: 1rem;
+    border-radius: 12px;
+    margin-top: 1rem;
+}
+
+.route-instructions h4 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--dark);
+}
+
+.instructions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.instruction-item {
+    display: flex;
+    align-items: start;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--gray-light);
+    border-radius: 8px;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.instruction-item:hover {
+    background: rgba(255, 107, 53, 0.1);
+    transform: translateX(5px);
+}
+
+.instruction-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.instruction-text {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.instruction-text strong {
+    color: var(--dark);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.instruction-text em {
+    color: var(--primary);
+    font-style: normal;
+    font-weight: 600;
+}
+
+.instruction-text small {
+    color: var(--gray);
+    font-size: 0.8rem;
+}
+
+/* Real Route Line Enhancement */
+.planned-route-line {
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: routeDraw 2s ease forwards;
+}
+
+@keyframes routeDraw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .main-container {
+        grid-template-columns: 250px 1fr;
+    }
+    
+    .chat-panel {
+        display: none;
+    }
+    
+    .style-options {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .map-stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .route-planning-panel {
+        width: 95%;
+        padding: 1.5rem;
+        max-height: 85vh;
+    }
+    
+    .route-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .route-actions {
+        grid-template-columns: 1fr;
+    }
+    
+    .navigation-active {
+        flex-direction: column;
+        gap: 1rem;
+        width: 90%;
+    }
+    
+    .route-instructions {
+        max-height: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        position: relative;
+        top: 0;
+    }
+    
+    .nav-user {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .filters-panel.active {
+        grid-template-columns: 1fr;
+    }
+    
+    .runners-list,
+    .challenges-grid,
+    .shop-grid,
+    .friends-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .profile-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Custom Map Markers */
+.custom-marker {
+    font-size: 2rem;
+    text-align: center;
+    line-height: 40px;
+    animation: markerPulse 2s infinite;
+}
+
+.user-marker {
+    filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.8));
+}
+
+.runner-marker {
+    filter: drop-shadow(0 0 5px rgba(78, 205, 196, 0.6));
+    cursor: pointer;
+}
+
+.runner-marker:hover {
+    animation: markerBounce 0.5s ease;
+}
+
+@keyframes markerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes markerBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Leaflet Popup Custom Style */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+}
+
+.leaflet-popup-content {
+    margin: 1rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-light);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--dark);
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.loading {
+    animation: pulse 1.5s infinite;
+}
+
+/* ========================================
+   MINI-GAMES SECTION
+   ======================================== */
+
+/* Game Grid */
+.minigames-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.game-card {
+    background: linear-gradient(135deg, var(--white), var(--gray-light));
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+}
+
+.game-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+}
+
+.game-icon {
+    font-size: 3.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    animation: bounce 2s infinite;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.game-header h3 {
+    font-size: 1.25rem;
+    color: var(--dark);
+}
+
+.game-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: var(--gray-light);
+    color: var(--dark);
+}
+
+.game-badge.featured {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: var(--white);
+    animation: pulse 2s infinite;
+}
+
+.game-description {
+    color: var(--gray);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    min-height: 50px;
+}
+
+.game-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.game-stats span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.game-rewards {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    background: rgba(255, 107, 53, 0.1);
+    border-radius: 8px;
+    justify-content: center;
+}
+
+.game-rewards span {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.game-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+.game-coins-display {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.game-coins-display span {
+    padding: 0.5rem 1rem;
+    background: var(--gray-light);
+    border-radius: 20px;
+}
+
+/* Active Game Section */
+.active-game-section {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-lg);
+    border: 3px solid var(--primary);
+}
+
+.game-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--gray-light);
+}
+
+.game-timer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Territory Capture Game */
+.territory-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-box {
+    background: var(--gray-light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.stat-box:hover {
+    transform: scale(1.05);
+}
+
+.stat-box.team-red {
+    background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+    color: var(--white);
+}
+
+.stat-box.team-blue {
+    background: linear-gradient(135deg, #4ECDC4, #6ED9D0);
+    color: var(--white);
+}
+
+.stat-box.neutral {
+    background: linear-gradient(135deg, var(--gray-light), var(--white));
+}
+
+.stat-box h4 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.territory-count {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.big-number {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.territory-count span:last-child {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.team-players {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.mini-game-map {
+    width: 100%;
+    height: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-md);
+    background: var(--gray-light);
+}
+
+.game-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.game-actions .btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+}
+
+/* Game Objective Box */
+.game-objective {
+    background: linear-gradient(135deg, var(--accent), var(--secondary));
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+/* Game Leaderboard */
+.game-leaderboard {
+    background: var(--gray-light);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.game-leaderboard h4 {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.game-leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: var(--white);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.game-leaderboard-rank {
+    font-size: 1.25rem;
+    font-weight: 700;
+    min-width: 40px;
+}
+
+.game-leaderboard-name {
+    flex: 1;
+    font-weight: 600;
+}
+
+.game-leaderboard-score {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* My Games Section */
+.my-games-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--gray-light);
+}
+
+.my-games-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--dark);
+}
+
+.game-history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+/* Territory Zone Markers */
+.territory-marker {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border: 3px solid var(--white);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.territory-marker:hover {
+    transform: scale(1.2);
+}
+
+.territory-marker.neutral {
+    background: var(--gray);
+    color: var(--white);
+}
+
+.territory-marker.red {
+    background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+    color: var(--white);
+    animation: territoryPulse 2s infinite;
+}
+
+.territory-marker.blue {
+    background: linear-gradient(135deg, #4ECDC4, #6ED9D0);
+    color: var(--white);
+    animation: territoryPulse 2s infinite;
+}
+
+@keyframes territoryPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 15px rgba(255, 107, 107, 0);
+    }
+}
+
+/* Checkpoint Marker */
+.checkpoint-marker {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    border: 3px solid var(--white);
+    box-shadow: var(--shadow-md);
+    animation: checkpointBounce 1s infinite;
+}
+
+@keyframes checkpointBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.checkpoint-marker.completed {
+    background: var(--success);
+    animation: none;
+}
+
+/* Treasure Marker */
+.treasure-marker {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border: 3px solid var(--white);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    animation: treasureGlow 2s infinite;
+}
+
+@keyframes treasureGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
+    }
+}
+
+/* Responsive Mini-Games */
+@media (max-width: 768px) {
+    .minigames-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .territory-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-actions {
+        flex-direction: column;
+    }
+    
+    .game-actions .btn {
+        width: 100%;
+    }
+}
+

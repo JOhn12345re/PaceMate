@@ -1,0 +1,125 @@
+# Configuration CodeRabbit pour PaceMate
+# Documentation: https://docs.coderabbit.ai/guides/configure-coderabbit
+
+# Langue des reviews
+language: fr
+
+# Ton des commentaires
+tone_instructions: "Sois constructif, pédagogique et encourage les bonnes pratiques. Utilise des emojis pour rendre les reviews plus engageantes."
+
+# Règles d'analyse
+reviews:
+  # Activer les reviews automatiques
+  auto_review:
+    enabled: true
+    drafts: false
+    
+  # Paramètres de review
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  
+  # Filtres de fichiers à analyser
+  path_filters:
+    - "**/*.js"
+    - "**/*.css"
+    - "**/*.html"
+    - "**/*.json"
+    - "**/*.md"
+  
+  # Fichiers à ignorer
+  path_instructions:
+    - path: "node_modules/**"
+      instructions: "Ignorer complètement"
+    - path: "public/**/*.min.*"
+      instructions: "Fichiers minifiés, ne pas analyser"
+    - path: "cypress/videos/**"
+      instructions: "Vidéos de tests, ignorer"
+    - path: "cypress/screenshots/**"
+      instructions: "Screenshots de tests, ignorer"
+    - path: "logs/**"
+      instructions: "Fichiers de logs, ignorer"
+    - path: "coverage/**"
+      instructions: "Rapports de couverture, ignorer"
+    
+  # Instructions spécifiques par type de fichier
+  - path: "server.js"
+    instructions: |
+      - Vérifier la sécurité des endpoints
+      - Valider la gestion des erreurs
+      - Confirmer que les middlewares sont bien ordonnés
+      - Vérifier les potentielles injections
+      
+  - path: "api/**/*.js"
+    instructions: |
+      - Valider l'authentification sur les routes protégées
+      - Vérifier la validation des inputs
+      - Confirmer la gestion des erreurs async/await
+      - Vérifier les requêtes MongoDB (injections NoSQL)
+      - S'assurer de la pagination pour les listes
+      
+  - path: "api/models/*.js"
+    instructions: |
+      - Vérifier les index pour les performances
+      - Valider les contraintes de schéma
+      - Confirmer les validations
+      - Vérifier les hooks pre/post
+      
+  - path: "app.js"
+    instructions: |
+      - Vérifier la logique métier
+      - Valider les manipulations du DOM
+      - Confirmer la gestion des événements
+      - Vérifier les fuites mémoire potentielles
+      - S'assurer de la compatibilité navigateur
+      
+  - path: "styles.css"
+    instructions: |
+      - Vérifier la compatibilité mobile
+      - Valider l'accessibilité (contraste, tailles)
+      - Confirmer les animations performantes
+      - Vérifier les unités responsive
+      
+  - path: "Dockerfile"
+    instructions: |
+      - Vérifier les meilleures pratiques Docker
+      - Confirmer la sécurité (utilisateur non-root)
+      - Valider les layers pour le cache
+      - Vérifier le healthcheck
+
+# Configuration du chat
+chat:
+  auto_reply: true
+
+# Outils activés
+tools:
+  # AST (Abstract Syntax Tree) pour analyse approfondie
+  ast:
+    enabled: true
+    
+  # Ruff (Python linter) - désactivé car pas de Python
+  ruff:
+    enabled: false
+
+# Règles de revue personnalisées
+early_access: false
+
+# Connaissances du projet
+knowledge_base:
+  - "PaceMate est une application de running sociale full-stack"
+  - "Stack: Node.js, Express, MongoDB, Socket.IO, Vanilla JS"
+  - "Architecture: REST API + WebSocket pour temps réel"
+  - "Authentification: JWT avec bcrypt"
+  - "Sécurité: Helmet, CORS, Rate Limiting"
+  - "Base de données: MongoDB avec Mongoose"
+  - "Frontend: Vanilla JavaScript (ES6+), Leaflet.js pour les cartes"
+  - "Tests: Cypress pour E2E"
+  - "Déploiement: Docker, Heroku, Railway, Render"
+  - "Fonctionnalités: carte interactive, mini-jeux multijoueurs, gamification, social"
+
+# Points d'attention particuliers
+abort_on_close: true
+enable_free_tier: true
+

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaceMate - Trouve ton partenaire de course 🏃‍♂️</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">🏃‍♂️</span>
+                <span class="logo-text">PaceMate</span>
+            </div>
+            <div class="nav-user">
+                <div class="user-coins">
+                    <span class="coin-icon">💰</span>
+                    <span id="userCoins">0</span>
+                </div>
+                <div class="user-level">
+                    <span class="level-icon">⭐</span>
+                    <span>Niveau <span id="userLevel">1</span></span>
+                </div>
+                <div class="user-xp">
+                    <div class="xp-bar">
+                        <div class="xp-progress" id="xpProgress"></div>
+                    </div>
+                    <span class="xp-text"><span id="userXP">0</span>/<span id="userXPMax">100</span> XP</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="section-title">🗺️ Navigation</h3>
+                <button class="sidebar-btn active" data-view="map">
+                    <span class="btn-icon">🗺️</span>
+                    <span>Carte Interactive</span>
+                </button>
+                <button class="sidebar-btn" data-view="challenges">
+                    <span class="btn-icon">🎯</span>
+                    <span>Défis</span>
+                    <span class="notification-badge" id="challengesBadge">3</span>
+                </button>
+                <button class="sidebar-btn" data-view="minigames">
+                    <span class="btn-icon">🎮</span>
+                    <span>Mini-Jeux</span>
+                    <span class="notification-badge" style="background: var(--accent); color: var(--dark);">NEW</span>
+                </button>
+                <button class="sidebar-btn" data-view="leaderboard">
+                    <span class="btn-icon">🏆</span>
+                    <span>Classement</span>
+                </button>
+                <button class="sidebar-btn" data-view="friends">
+                    <span class="btn-icon">👥</span>
+                    <span>Amis</span>
+                </button>
+                <button class="sidebar-btn" data-view="shop">
+                    <span class="btn-icon">🛒</span>
+                    <span>Boutique</span>
+                </button>
+                <button class="sidebar-btn" data-view="profile">
+                    <span class="btn-icon">👤</span>
+                    <span>Profil</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="section-title">🔥 Défis du Jour</h3>
+                <div id="dailyChallenges" class="daily-challenges"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="section-title">🏅 Mes Badges</h3>
+                <div id="userBadges" class="user-badges"></div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Map View -->
+            <div class="view active" id="mapView">
+                <div class="view-header">
+                    <h2 class="view-title">🗺️ Trouve des coureurs près de toi</h2>
+                    <div class="map-controls">
+                        <button class="btn btn-primary" id="locateMe">
+                            📍 Me localiser
+                        </button>
+                        <button class="btn btn-secondary" id="toggleFilters">
+                            🔍 Filtres
+                        </button>
+                        <button class="btn btn-secondary" id="toggleMapStyle">
+                            🎨 Style
+                        </button>
+                        <button class="btn btn-secondary" id="measureDistance">
+                            📏 Mesurer
+                        </button>
+                        <button class="btn btn-secondary" id="showRoutes">
+                            🛣️ Itinéraires
+                        </button>
+                        <button class="btn btn-secondary" id="toggleHeatmap">
+                            🔥 Heatmap
+                        </button>
+                        <button class="btn btn-secondary" id="fullscreenMap">
+                            ⛶ Plein écran
+                        </button>
+                        <button class="btn btn-primary" id="planRouteBtn">
+                            🧭 Planifier itinéraire
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Route Planning Panel -->
+                <div class="route-planning-panel" id="routePlanningPanel" style="display: none;">
+                    <div class="route-panel-header">
+                        <h3>🧭 Planification d'Itinéraire</h3>
+                        <button class="close-btn" onclick="closeRoutePlanner()">✖️</button>
+                    </div>
+                    
+                    <div class="route-steps">
+                        <div class="route-step">
+                            <div class="step-icon">🅰️</div>
+                            <div class="step-content">
+                                <label>Point de départ</label>
+                                <input type="text" id="startPoint" placeholder="Ma position actuelle" readonly>
+                                <button class="step-btn" onclick="selectStartPoint()">📍 Choisir sur la carte</button>
+                            </div>
+                        </div>
+
+                        <div class="waypoints-container" id="waypointsContainer"></div>
+
+                        <div class="route-step">
+                            <div class="step-icon">🅱️</div>
+                            <div class="step-content">
+                                <label>Point d'arrivée</label>
+                                <input type="text" id="endPoint" placeholder="Cliquez sur 'Choisir sur la carte'" readonly>
+                                <button class="step-btn" onclick="selectEndPoint()">📍 Choisir sur la carte</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="route-options">
+                        <button class="btn btn-secondary" onclick="addWaypoint()">➕ Ajouter étape intermédiaire</button>
+                        <button class="btn btn-primary" onclick="calculateRoute()">🧭 Calculer l'itinéraire</button>
+                    </div>
+
+                    <div class="route-info" id="routeInfo" style="display: none;">
+                        <h4>📊 Informations de l'itinéraire</h4>
+                        <div class="route-stats">
+                            <div class="route-stat">
+                                <span class="stat-icon">📏</span>
+                                <span class="stat-label">Distance</span>
+                                <span class="stat-value" id="routeDistance">-</span>
+                            </div>
+                            <div class="route-stat">
+                                <span class="stat-icon">⏱️</span>
+                                <span class="stat-label">Temps estimé</span>
+                                <span class="stat-value" id="routeTime">-</span>
+                            </div>
+                            <div class="route-stat">
+                                <span class="stat-icon">⚡</span>
+                                <span class="stat-label">Allure suggérée</span>
+                                <span class="stat-value" id="routePace">-</span>
+                            </div>
+                            <div class="route-stat">
+                                <span class="stat-icon">🔥</span>
+                                <span class="stat-label">Calories</span>
+                                <span class="stat-value" id="routeCalories">-</span>
+                            </div>
+                        </div>
+
+                        <div class="route-actions">
+                            <button class="btn btn-primary" onclick="startNavigation()">🏃‍♂️ Démarrer la navigation</button>
+                            <button class="btn btn-secondary" onclick="saveRoute()">💾 Sauvegarder l'itinéraire</button>
+                            <button class="btn btn-secondary" onclick="shareRoute()">📤 Partager</button>
+                            <button class="btn btn-danger" onclick="clearRoute()">🗑️ Effacer</button>
+                        </div>
+                    </div>
+
+                    <div class="saved-routes" id="savedRoutes" style="display: none;">
+                        <h4>💾 Mes itinéraires sauvegardés</h4>
+                        <div id="savedRoutesList"></div>
+                    </div>
+                </div>
+                
+                <!-- Map Stats Bar -->
+                <div class="map-stats-bar">
+                    <div class="map-stat">
+                        <span class="stat-label">👥 Coureurs visibles</span>
+                        <span class="stat-value" id="visibleRunners">0</span>
+                    </div>
+                    <div class="map-stat">
+                        <span class="stat-label">📍 Zone active</span>
+                        <span class="stat-value" id="activeZone">Centre-ville</span>
+                    </div>
+                    <div class="map-stat">
+                        <span class="stat-label">🌡️ Température</span>
+                        <span class="stat-value" id="weatherTemp">22°C</span>
+                    </div>
+                    <div class="map-stat">
+                        <span class="stat-label">⚡ Activité</span>
+                        <span class="stat-value" id="activityLevel">Élevée</span>
+                    </div>
+                </div>
+
+                <!-- Filters Panel -->
+                <div class="filters-panel" id="filtersPanel">
+                    <div class="filter-group">
+                        <label>🔍 Distance maximale</label>
+                        <input type="range" id="distanceFilter" min="1" max="50" value="10" oninput="applyMapFilters()">
+                        <span id="distanceValue" class="filter-value">10 km</span>
+                    </div>
+                    <div class="filter-group">
+                        <label>⚡ Allure (min/km)</label>
+                        <select id="paceFilter" onchange="applyMapFilters()">
+                            <option value="all">Toutes</option>
+                            <option value="3-4">3-4 min/km (Pro)</option>
+                            <option value="4-5">4-5 min/km (Avancé)</option>
+                            <option value="5-6">5-6 min/km (Intermédiaire)</option>
+                            <option value="6-8">6-8 min/km (Débutant)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>🏅 Niveau</label>
+                        <select id="levelFilter" onchange="applyMapFilters()">
+                            <option value="all">Tous niveaux</option>
+                            <option value="beginner">Débutant</option>
+                            <option value="intermediate">Intermédiaire</option>
+                            <option value="advanced">Avancé</option>
+                            <option value="pro">Pro</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>🟢 Disponibilité</label>
+                        <select id="availabilityFilter" onchange="applyMapFilters()">
+                            <option value="all">Tous</option>
+                            <option value="online">🟢 En ligne seulement</option>
+                            <option value="offline">⚫ Hors ligne</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Affichage</label>
+                        <div class="filter-checkboxes">
+                            <label><input type="checkbox" id="showHeatmap" onchange="toggleHeatmap()"> Carte de chaleur</label>
+                            <label><input type="checkbox" id="clusterMarkers" checked onchange="toggleClustering()"> Regrouper les marqueurs</label>
+                        </div>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn-primary btn-sm" onclick="applyMapFilters()">✓ Appliquer</button>
+                        <button class="btn btn-secondary btn-sm" onclick="resetMapFilters()">↺ Réinitialiser</button>
+                    </div>
+                </div>
+
+                <!-- Map Style Selector -->
+                <div class="map-style-selector" id="mapStyleSelector" style="display: none;">
+                    <h4>🎨 Style de Carte</h4>
+                    <div class="style-options">
+                        <div class="style-option active" data-style="default" onclick="changeMapStyle('default')">
+                            <div class="style-preview" style="background: linear-gradient(135deg, #f0f0f0, #d0d0d0);"></div>
+                            <span>Standard</span>
+                        </div>
+                        <div class="style-option" data-style="dark" onclick="changeMapStyle('dark')">
+                            <div class="style-preview" style="background: linear-gradient(135deg, #2d3436, #636e72);"></div>
+                            <span>Sombre</span>
+                        </div>
+                        <div class="style-option" data-style="satellite" onclick="changeMapStyle('satellite')">
+                            <div class="style-preview" style="background: linear-gradient(135deg, #74b9ff, #0984e3);"></div>
+                            <span>Satellite</span>
+                        </div>
+                        <div class="style-option" data-style="terrain" onclick="changeMapStyle('terrain')">
+                            <div class="style-preview" style="background: linear-gradient(135deg, #a8e6cf, #dcedc1);"></div>
+                            <span>Terrain</span>
+                        </div>
+                        <div class="style-option" data-style="minimal" onclick="changeMapStyle('minimal')">
+                            <div class="style-preview" style="background: linear-gradient(135deg, #ffffff, #f5f5f5);"></div>
+                            <span>Minimal</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular Routes Panel -->
+                <div class="routes-panel" id="routesPanel" style="display: none;">
+                    <h4>🛣️ Parcours Populaires</h4>
+                    <div id="popularRoutes" class="routes-list"></div>
+                </div>
+
+                <!-- Map Styles Selector -->
+                <div class="map-style-selector" id="mapStyleSelector" style="display: none;">
+                    <h4>🎨 Choisir le style de carte</h4>
+                    <div class="style-options">
+                        <div class="style-option active" data-style="default" onclick="changeMapStyle('default')">
+                            <div class="style-preview" style="background: linear-gradient(135deg, #f0f0f0, #d0d0d0);">🗺️</div>
+                            <span>Standard</span>
+                        </div>
+                        <div class="style-option" data-style="dark" onclick="changeMapStyle('dark')">
+                            <div class="style-preview" style="background: linear-gradient(135deg, #2C3E50, #1a1a2e);">🌙</div>
+                            <span>Sombre</span>
+                        </div>
+                        <div class="style-option" data-style="satellite" onclick="changeMapStyle('satellite')">
+                            <div class="style-preview" style="background: linear-gradient(135deg, #1e3a5f, #4a7ba7);">🛰️</div>
+                            <span>Satellite</span>
+                        </div>
+                        <div class="style-option" data-style="terrain" onclick="changeMapStyle('terrain')">
+                            <div class="style-preview" style="background: linear-gradient(135deg, #8B7355, #D2B48C);">⛰️</div>
+                            <span>Relief</span>
+                        </div>
+                        <div class="style-option" data-style="streets" onclick="changeMapStyle('streets')">
+                            <div class="style-preview" style="background: linear-gradient(135deg, #ffffff, #e8e8e8);">🛣️</div>
+                            <span>Rues</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Container -->
+                <div id="map" class="map-container">
+                    <!-- Map Legend -->
+                    <div class="map-legend" id="mapLegend">
+                        <h4>📊 Légende</h4>
+                        <div class="legend-item">
+                            <span class="legend-icon" style="background: var(--primary);">🎯</span>
+                            <span>Vous</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-icon" style="background: var(--secondary);">🏃‍♂️</span>
+                            <span>Coureurs</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-icon" style="background: var(--success);">📍</span>
+                            <span>Points d'intérêt</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Map Stats Overlay -->
+                    <div class="map-stats-overlay">
+                        <div class="stat-mini">
+                            <span class="stat-icon">👥</span>
+                            <span id="visibleRunners">0</span>
+                        </div>
+                        <div class="stat-mini">
+                            <span class="stat-icon">📏</span>
+                            <span id="mapDistance">0 km</span>
+                        </div>
+                        <div class="stat-mini">
+                            <span class="stat-icon">⭐</span>
+                            <span id="avgLevel">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nearby Runners List -->
+                <div class="nearby-runners">
+                    <h3>👥 Coureurs à proximité (<span id="runnersCount">0</span>)</h3>
+                    <div id="runnersList" class="runners-list"></div>
+                </div>
+            </div>
+
+            <!-- Challenges View -->
+            <div class="view" id="challengesView">
+                <div class="view-header">
+                    <h2 class="view-title">🎯 Défis & Récompenses</h2>
+                </div>
+                <div class="challenges-container">
+                    <div class="challenges-section">
+                        <h3>🔥 Défis Quotidiens</h3>
+                        <div id="dailyChallengesList" class="challenges-grid"></div>
+                    </div>
+                    <div class="challenges-section">
+                        <h3>📅 Défis Hebdomadaires</h3>
+                        <div id="weeklyChallengesList" class="challenges-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini-Games View -->
+            <div class="view" id="minigamesView">
+                <div class="view-header">
+                    <h2 class="view-title">🎮 Mini-Jeux Compétitifs</h2>
+                    <div class="game-coins-display">
+                        <span>💰 <span id="gameCoins">0</span> coins</span>
+                        <span>🏆 <span id="gameWins">0</span> victoires</span>
+                    </div>
+                </div>
+                
+                <!-- Game Selection -->
+                <div class="minigames-grid">
+                    <!-- Game 1: Territory Capture -->
+                    <div class="game-card" data-game="territory">
+                        <div class="game-icon">🗺️</div>
+                        <div class="game-header">
+                            <h3>Capture de Zones</h3>
+                            <span class="game-badge featured">🔥 Populaire</span>
+                        </div>
+                        <p class="game-description">Capture le maximum de zones sur la carte ! Mode solo ou en équipe.</p>
+                        <div class="game-stats">
+                            <span>👥 1-20 joueurs</span>
+                            <span>⏱️ 15-30 min</span>
+                        </div>
+                        <div class="game-rewards">
+                            <span>🏆 +500 XP</span>
+                            <span>💰 +200 coins</span>
+                        </div>
+                        <button class="btn btn-primary game-btn" onclick="startGame('territory')">🎮 Jouer</button>
+                    </div>
+
+                    <!-- Game 2: Checkpoint Race -->
+                    <div class="game-card" data-game="checkpoint">
+                        <div class="game-icon">📍</div>
+                        <div class="game-header">
+                            <h3>Course aux Checkpoints</h3>
+                            <span class="game-badge">⚡ Rapide</span>
+                        </div>
+                        <p class="game-description">Atteins tous les checkpoints le plus vite possible !</p>
+                        <div class="game-stats">
+                            <span>👥 1-10 joueurs</span>
+                            <span>⏱️ 10-20 min</span>
+                        </div>
+                        <div class="game-rewards">
+                            <span>🏆 +300 XP</span>
+                            <span>💰 +150 coins</span>
+                        </div>
+                        <button class="btn btn-primary game-btn" onclick="startGame('checkpoint')">🎮 Jouer</button>
+                    </div>
+
+                    <!-- Game 3: King of the Hill -->
+                    <div class="game-card" data-game="kinghill">
+                        <div class="game-icon">⛰️</div>
+                        <div class="game-header">
+                            <h3>Roi de la Colline</h3>
+                            <span class="game-badge">👑 Intense</span>
+                        </div>
+                        <p class="game-description">Contrôle la zone centrale le plus longtemps possible !</p>
+                        <div class="game-stats">
+                            <span>👥 2-15 joueurs</span>
+                            <span>⏱️ 15 min</span>
+                        </div>
+                        <div class="game-rewards">
+                            <span>🏆 +400 XP</span>
+                            <span>💰 +180 coins</span>
+                        </div>
+                        <button class="btn btn-primary game-btn" onclick="startGame('kinghill')">🎮 Jouer</button>
+                    </div>
+
+                    <!-- Game 4: Treasure Hunt -->
+                    <div class="game-card" data-game="treasure">
+                        <div class="game-icon">💎</div>
+                        <div class="game-header">
+                            <h3>Chasse au Trésor</h3>
+                            <span class="game-badge">🌟 Aventure</span>
+                        </div>
+                        <p class="game-description">Trouve les trésors cachés en suivant les indices !</p>
+                        <div class="game-stats">
+                            <span>👥 1-20 joueurs</span>
+                            <span>⏱️ 20-40 min</span>
+                        </div>
+                        <div class="game-rewards">
+                            <span>🏆 +600 XP</span>
+                            <span>💰 +250 coins</span>
+                        </div>
+                        <button class="btn btn-primary game-btn" onclick="startGame('treasure')">🎮 Jouer</button>
+                    </div>
+
+                    <!-- Game 5: Team Relay -->
+                    <div class="game-card" data-game="relay">
+                        <div class="game-icon">🏃‍♂️</div>
+                        <div class="game-header">
+                            <h3>Relais par Équipe</h3>
+                            <span class="game-badge">👥 Équipe</span>
+                        </div>
+                        <p class="game-description">Course en relais avec ton équipe ! Coordination = victoire.</p>
+                        <div class="game-stats">
+                            <span>👥 4-20 joueurs</span>
+                            <span>⏱️ 20-30 min</span>
+                        </div>
+                        <div class="game-rewards">
+                            <span>🏆 +450 XP</span>
+                            <span>💰 +200 coins</span>
+                        </div>
+                        <button class="btn btn-primary game-btn" onclick="startGame('relay')">🎮 Jouer</button>
+                    </div>
+
+                    <!-- Game 6: Zone Defense -->
+                    <div class="game-card" data-game="defense">
+                        <div class="game-icon">🛡️</div>
+                        <div class="game-header">
+                            <h3>Défense de Zone</h3>
+                            <span class="game-badge">⚔️ Stratégie</span>
+                        </div>
+                        <p class="game-description">Défends ta zone contre les envahisseurs !</p>
+                        <div class="game-stats">
+                            <span>👥 2-10 joueurs</span>
+                            <span>⏱️ 10-15 min</span>
+                        </div>
+                        <div class="game-rewards">
+                            <span>🏆 +350 XP</span>
+                            <span>💰 +160 coins</span>
+                        </div>
+                        <button class="btn btn-primary game-btn" onclick="startGame('defense')">🎮 Jouer</button>
+                    </div>
+                </div>
+
+                <!-- Active Game Section (hidden by default) -->
+                <div id="activeGameSection" class="active-game-section" style="display: none;">
+                    <div class="game-header-bar">
+                        <h3 id="activeGameTitle">🎮 Partie en cours</h3>
+                        <div class="game-timer">
+                            <span>⏱️ <span id="gameTimer">15:00</span></span>
+                            <button class="btn btn-secondary" onclick="quitGame()">❌ Quitter</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Territory Capture Game Interface -->
+                    <div id="territoryGameInterface" class="game-interface" style="display: none;">
+                        <div class="territory-stats">
+                            <div class="stat-box team-red">
+                                <h4>🔴 Équipe Rouge</h4>
+                                <div class="territory-count">
+                                    <span class="big-number" id="redTerritory">0</span>
+                                    <span>zones</span>
+                                </div>
+                                <div class="team-players" id="redPlayers"></div>
+                            </div>
+                            <div class="stat-box team-blue">
+                                <h4>🔵 Équipe Bleue</h4>
+                                <div class="territory-count">
+                                    <span class="big-number" id="blueTerritory">0</span>
+                                    <span>zones</span>
+                                </div>
+                                <div class="team-players" id="bluePlayers"></div>
+                            </div>
+                            <div class="stat-box neutral">
+                                <h4>⚪ Zones Neutres</h4>
+                                <div class="territory-count">
+                                    <span class="big-number" id="neutralTerritory">0</span>
+                                    <span>zones</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="territoryMap" class="mini-game-map"></div>
+                        <div class="game-actions">
+                            <button class="btn btn-primary" onclick="captureZone()">📍 Capturer cette zone</button>
+                            <button class="btn btn-secondary" onclick="switchTeam()">🔄 Changer d'équipe</button>
+                        </div>
+                    </div>
+
+                    <!-- Generic Game Interface for other games -->
+                    <div id="genericGameInterface" class="game-interface" style="display: none;">
+                        <div id="genericGameMap" class="mini-game-map"></div>
+                        <div id="gameObjective" class="game-objective"></div>
+                        <div id="gameLeaderboard" class="game-leaderboard"></div>
+                    </div>
+                </div>
+
+                <!-- My Games History -->
+                <div class="my-games-section">
+                    <h3>📊 Mes Statistiques de Jeu</h3>
+                    <div class="game-history-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🏆</div>
+                            <div class="stat-value" id="totalWins">0</div>
+                            <div class="stat-label">Victoires</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎮</div>
+                            <div class="stat-value" id="totalGames">0</div>
+                            <div class="stat-label">Parties jouées</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📈</div>
+                            <div class="stat-value" id="winRate">0%</div>
+                            <div class="stat-label">Taux de victoire</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-value" id="favoriteGame">-</div>
+                            <div class="stat-label">Jeu favori</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard View -->
+            <div class="view" id="leaderboardView">
+                <div class="view-header">
+                    <h2 class="view-title">🏆 Classement</h2>
+                    <div class="leaderboard-tabs">
+                        <button class="tab-btn active" data-tab="global">🌍 Mondial</button>
+                        <button class="tab-btn" data-tab="local">📍 Local</button>
+                        <button class="tab-btn" data-tab="friends">👥 Amis</button>
+                    </div>
+                </div>
+                <div id="leaderboardContent" class="leaderboard-content"></div>
+            </div>
+
+            <!-- Friends View -->
+            <div class="view" id="friendsView">
+                <div class="view-header">
+                    <h2 class="view-title">👥 Mes Amis</h2>
+                    <button class="btn btn-primary" id="addFriendBtn">➕ Ajouter un ami</button>
+                </div>
+                <div class="friends-container">
+                    <div id="friendsList" class="friends-list"></div>
+                </div>
+            </div>
+
+            <!-- Shop View -->
+            <div class="view" id="shopView">
+                <div class="view-header">
+                    <h2 class="view-title">🛒 Boutique</h2>
+                    <div class="user-coins-display">
+                        <span class="coin-icon">💰</span>
+                        <span id="shopCoins">0</span> coins
+                    </div>
+                </div>
+                <div id="shopItems" class="shop-grid"></div>
+            </div>
+
+            <!-- Profile View -->
+            <div class="view" id="profileView">
+                <div class="view-header">
+                    <h2 class="view-title">👤 Mon Profil</h2>
+                </div>
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <div class="profile-avatar">🏃‍♂️</div>
+                        <div class="profile-info">
+                            <h3 id="profileName">Coureur Anonyme</h3>
+                            <p class="profile-level">Niveau <span id="profileLevel">1</span></p>
+                            <p class="profile-stats">
+                                <span>💰 <span id="profileCoins">0</span> coins</span>
+                                <span>⭐ <span id="profileXP">0</span> XP</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="profile-stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🏃‍♂️</div>
+                            <div class="stat-value" id="totalRuns">0</div>
+                            <div class="stat-label">Courses totales</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📏</div>
+                            <div class="stat-value" id="totalDistance">0</div>
+                            <div class="stat-label">km parcourus</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⏱️</div>
+                            <div class="stat-value" id="totalTime">0</div>
+                            <div class="stat-label">heures de course</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔥</div>
+                            <div class="stat-value" id="currentStreak">0</div>
+                            <div class="stat-label">jours consécutifs</div>
+                        </div>
+                    </div>
+                    <div class="profile-section">
+                        <h3>🏅 Collection de Badges</h3>
+                        <div id="allBadges" class="badges-grid"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Chat Panel -->
+        <aside class="chat-panel" id="chatPanel">
+            <div class="chat-header">
+                <h3>💬 Messages</h3>
+                <button class="chat-close" id="closeChatBtn">✖️</button>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Écris un message...">
+                <button id="sendMessageBtn">📨</button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Runner Details Modal -->
+    <div class="modal" id="runnerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="runnerModalName"></h3>
+                <button class="modal-close">✖️</button>
+            </div>
+            <div class="modal-body" id="runnerModalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="sendRunRequestBtn">🏃‍♂️ Proposer une course</button>
+                <button class="btn btn-secondary" id="chatRunnerBtn">💬 Envoyer un message</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
