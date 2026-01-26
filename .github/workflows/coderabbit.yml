@@ -1,4 +1,4 @@
-name: CodeRabbit Analysis
+name: Code Quality Analysis
 
 on:
   pull_request:
@@ -9,9 +9,9 @@ on:
       - develop
 
 jobs:
-  coderabbit-analysis:
+  code-quality:
     runs-on: ubuntu-latest
-    name: Analyse CodeRabbit
+    name: ESLint & Quality Checks
     
     steps:
       - name: Checkout code
@@ -32,17 +32,20 @@ jobs:
         run: npx eslint . --ext .js --format json --output-file eslint-report.json || true
         continue-on-error: true
       
+      - name: Display ESLint Results
+        if: always()
+        run: |
+          echo "📊 ESLint Analysis Results"
+          npx eslint . --ext .js || true
+      
       - name: Upload ESLint results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: eslint-report
           path: eslint-report.json
+          retention-days: 30
       
-      - name: CodeRabbit Review
-        uses: coderabbitai/coderabbit-action@v1
-        with:
-          # CodeRabbit s'exécute automatiquement sur les PRs
-          # Pas besoin de configuration supplémentaire
-          debug: false
+      # CodeRabbit s'exécute automatiquement comme GitHub App
+      # Pas besoin d'action ici - il suffit de l'installer sur le repo
 

@@ -2357,13 +2357,14 @@ async function calculateRoute() {
         ROUTE_PLANNER.currentRoute.remove();
     }
 
+    // Construire les coordonnées pour l'API (déplacer avant try/catch)
+    const coordinates = [
+        ROUTE_PLANNER.startPoint,
+        ...ROUTE_PLANNER.waypoints.filter(w => w !== null),
+        ROUTE_PLANNER.endPoint
+    ];
+
     try {
-        // Construire les coordonnées pour l'API
-        const coordinates = [
-            ROUTE_PLANNER.startPoint,
-            ...ROUTE_PLANNER.waypoints.filter(w => w !== null),
-            ROUTE_PLANNER.endPoint
-        ];
 
         // Convertir en format lon,lat pour OSRM
         const coordsString = coordinates.map(coord => `${coord[1]},${coord[0]}`).join(';');
